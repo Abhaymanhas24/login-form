@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import { v4 as uuidv4 } from "uuid";
-const { v4 } = require("uuid");
+import { v4 } from "uuid";
+
 import productRouter from "./routes/products.router.js";
 
 const app = express();
