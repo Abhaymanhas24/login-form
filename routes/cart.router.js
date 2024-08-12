@@ -4,6 +4,7 @@ const router = express.Router();
 import {
   getAllCartItemCtrl,
   AddToCartCtrl,
+  deleteFromCartByIdCtrl,
 } from "../controllers/cart.controller.js";
 router.get("/", getAllCartItemCtrl);
 router.post("/", AddToCartCtrl);
