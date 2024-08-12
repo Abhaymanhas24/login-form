@@ -2,6 +2,8 @@ import {
   getAllProducts,
   createProduct,
   updateProductById,
+  getProductById,
+  deleteProductById,
 } from "../service/product.service.js";
 import { v4 as uuidv4 } from "uuid";
 async function getAllProductCtrl(request, response) {
@@ -32,17 +34,36 @@ async function updateProductByIdctrl(request, response) {
   const { id } = request.params;
   const updatedata = request.body; //updated data
   try {
-    const existingData = await getproductById(id);
+    const existingData = await getProductById(id);
     if (existingData.data) {
       const result = await updateProductById(existingData, updatedata);
-      response.send(result);
+      response.send(result.data);
     } else {
       response.status(404).send({ msg: "Movie not found" });
     }
   } catch (error) {
     response.status(500).send("failed to edit the movie");
   }
-  // console.log(id, data, movieIdx);
+}
+async function deleteProductByIdCtrl(request, response) {
+  const { id } = request.params;
+
+  try {
+    const res = await getProductById(id);
+    if (res.data) {
+      await deleteProductById(id);
+      response.send({ msg: "deleted successfully", data: res.data });
+    } else {
+      response.status(404).send({ msg: "Product not found" });
+    }
+  } catch (error) {
+    response.status(500).send("deleted failed");
+  }
 }
 
-export { getAllProductCtrl, AddProductCtrl, updateProductByIdctrl };
+export {
+  getAllProductCtrl,
+  AddProductCtrl,
+  updateProductByIdctrl,
+  deleteProductByIdCtrl,
+};
