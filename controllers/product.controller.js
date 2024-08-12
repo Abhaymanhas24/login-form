@@ -3,6 +3,7 @@ import {
   createProduct,
   updateProductById,
 } from "../service/product.service.js";
+import { v4 as uuidv4 } from "uuid";
 async function getAllProductCtrl(request, response) {
   try {
     response.send(await getAllProducts());
@@ -20,7 +21,7 @@ async function AddProductCtrl(request, response) {
   try {
     await createProduct(addProduct);
 
-    response.status(201).send(addMovie);
+    response.status(201).send(addProduct);
   } catch (error) {
     response.status(500).send("fail to add Product"); //something bad happend on serve is 500
   }
@@ -31,7 +32,7 @@ async function updateProductByIdctrl(request, response) {
   const { id } = request.params;
   const updatedata = request.body; //updated data
   try {
-    const existingData = await getMovieById(id);
+    const existingData = await getproductById(id);
     if (existingData.data) {
       const result = await updateProductById(existingData, updatedata);
       response.send(result);
