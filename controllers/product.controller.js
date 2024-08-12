@@ -29,7 +29,6 @@ async function AddProductCtrl(request, response) {
   }
   // data.movieId = uuidv4();
 }
-
 async function updateProductByIdctrl(request, response) {
   const { id } = request.params;
   const updatedata = request.body; //updated data
