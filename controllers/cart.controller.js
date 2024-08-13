@@ -12,17 +12,17 @@ async function getAllCartItemCtrl(request, response) {
 }
 async function AddToCartCtrl(request, response) {
   const data = request.body;
-  const id = data.ProductId;
+  const id = data.productId;
   const addProduct = {
     ...data,
     UserId: uuidv4(),
   };
   try {
     const existingData = await getProductById(id);
-
     if (existingData.data.ProductId) {
-      console.log("helllo");
+      console.log(existingData.data.ProductId);
       await createCartProduct(addProduct);
+      response.status(201).send(addProduct);
     } else {
       response.status(404).send({ msg: "Product not found" });
     }
