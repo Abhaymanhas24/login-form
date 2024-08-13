@@ -1,3 +1,4 @@
+import { Products } from "../entities/product.entity.js";
 import { getAllCartItem, createCartProduct } from "../service/cart.service.js";
 import { getProductById } from "../service/product.service.js";
 import { v4 as uuidv4 } from "uuid";
@@ -11,24 +12,26 @@ async function getAllCartItemCtrl(request, response) {
   }
 }
 async function AddToCartCtrl(request, response) {
+  const { userId } = request.params;
   const data = request.body;
   const id = data.productId;
   const addProduct = {
-    ...data,
-    UserId: uuidv4(),
+    products: [data],
+    totalPrice: 0,
+    userId: userId,
   };
-  try {
-    const existingData = await getProductById(id);
-    if (existingData.data.ProductId) {
-      console.log(existingData.data.ProductId);
-      await createCartProduct(addProduct);
-      response.status(201).send(addProduct);
-    } else {
-      response.status(404).send({ msg: "Product not found" });
-    }
-  } catch (error) {
-    response.status(500).send("failed to add to cart");
+  // try {
+  const existingData = await getProductById(id);
+  if (existingData.data.ProductId) {
+    console.log(existingData.data.ProductId);
+    await createCartProduct(addProduct);
+    response.status(201).send(addProduct);
+  } else {
+    response.status(404).send({ msg: "Product not found" });
   }
+  // } catch (error) {
+  //   response.status(500).send("failed to add to cart");
+  // }
 }
 
 async function deleteFromCartByIdCtrl(request, response) {

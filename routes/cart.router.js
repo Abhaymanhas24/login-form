@@ -7,6 +7,6 @@ import {
   deleteFromCartByIdCtrl,
 } from "../controllers/cart.controller.js";
 router.get("/", getAllCartItemCtrl);
-router.post("/", AddToCartCtrl);
+router.post("/:userId", AddToCartCtrl);
 router.delete("/:id", deleteFromCartByIdCtrl);
 export default router;
