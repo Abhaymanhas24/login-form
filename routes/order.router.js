@@ -5,5 +5,5 @@ import {
   AddToOrderCtrl,
 } from "../controllers/order.controller.js";
 router.get("/", getAllOrderCtrl);
-router.post("/:userId", AddToOrderCtrl);
+router.post("/:Id", AddToOrderCtrl);
 export default router;
