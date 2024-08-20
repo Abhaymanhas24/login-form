@@ -53,3 +53,16 @@ const Products = new Entity(
   { client, table: "products" }
 );
 export { Products };
+
+const prods = await Products.get([
+  {
+    ProductId: "7c209fe3-2bbf-4861-a549-b8993b528e55",
+    quantity: 7,
+  },
+  {
+    ProductId: "7c209fe3-2bbf-4861-a549-b8993b528e05",
+    quantity: 7,
+  },
+]).go();
+
+console.log(prods);

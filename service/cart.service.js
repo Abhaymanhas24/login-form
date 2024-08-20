@@ -9,10 +9,10 @@ async function createCartProduct(addProduct) {
 async function getUserIdById(Id) {
   return await Cart.get({ userId: Id }).go();
 }
-async function updateCartById(existingData, updatedata) {
+async function updateCartById(existingUser, data) {
   return await Cart.put({
-    ...existingData.data,
-    ...updatedata,
+    ...existingUser.data,
+    ...data,
   }).go();
 }
 async function deleteFromCartById(id) {

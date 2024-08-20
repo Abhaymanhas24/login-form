@@ -1,7 +1,7 @@
 import {
   getAllCartItem,
   createCartProduct,
-  getUserIdById,
+  getUserIdById as getCartByUserId,
   updateCartById,
   deleteFromCartById,
 } from "../service/cart.service.js";
@@ -19,52 +19,52 @@ async function AddToCartCtrl(request, response) {
   const { userId } = request.params;
   const data = request.body;
   const id = data.productId;
-  const existingUser = await getUserIdById(userId);
-  if (existingUser.data) {
-    try {
-      const existingData = await getProductById(id);
-      console.log(existingUser.data);
-      if (existingData.data.ProductId) {
-        console.log(existingData.data.ProductId);
-        await updateCartById(existingData, addProduct);
-        response.status(201).send(addProduct);
-      } else {
-        response.status(404).send({ msg: "Product not found" });
-      }
-    } catch (error) {
-      response.status(500).send("failed to add to cart");
+  const existingCart = await getCartByUserId(userId);
+  if (existingCart.data) {
+    // try {
+
+    console.log(existingCart.data);
+    if (existingCart.data.products) {
+      console.log(existingCart.data.products);
+      const new1 = await updateCartById(existingCart, data);
+      response.status(201).send(new1);
+    } else {
+      response.status(404).send({ msg: "Product not found" });
     }
+    // } catch (error) {
+    //   response.status(500).send("failed to add to cart");
+    // }
   } else {
     const addProduct = {
       products: [data],
       totalPrice: 0,
       userId: userId,
     };
-    try {
-      const existingData = await getProductById(id);
-      if (existingData.data.ProductId) {
-        console.log(existingData.data.ProductId);
-        await createCartProduct(addProduct);
-        response.status(201).send(addProduct);
-      } else {
-        response.status(404).send({ msg: "Product not found" });
-      }
-    } catch (error) {
-      response.status(500).send("failed to add to cart");
+    // try {
+    const existingData = await getProductById(id);
+    if (existingData.data.ProductId) {
+      console.log(existingData.data.ProductId);
+      await createCartProduct(addProduct);
+      response.status(201).send(addProduct);
+    } else {
+      response.status(404).send({ msg: "Product not found" });
     }
+    // } catch (error) {
+    //   response.status(500).send("failed to add to cart");
+    // }
   }
 }
 async function tocheckuserid(request, response) {
   const { userId } = request.params;
   console.log(userId);
-  const existingUser = await getUserIdById(userId);
+  const existingUser = await getCartByUserId(userId);
   response.send(existingUser);
 }
 async function deleteFromCartByIdCtrl(request, response) {
   const { id } = request.params;
 
   try {
-    const res = await getUserIdById(id);
+    const res = await getCartByUserId(id);
     if (res.data) {
       await deleteFromCartById(id);
       response.send({ msg: "deleted successfully", data: res.data });
