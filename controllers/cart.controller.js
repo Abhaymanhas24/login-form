@@ -4,6 +4,7 @@ import {
   getUserIdById as getCartByUserId,
   updateCartById,
   deleteFromCartById,
+  calculateTotalPrice,
 } from "../service/cart.service.js";
 import { getProductById } from "../service/product.service.js";
 
@@ -14,19 +15,7 @@ async function getAllCartItemCtrl(request, response) {
     response.send("products not found ");
   }
 }
-async function calculateTotalPrice(products) {
-  let totalPrice = 0;
 
-  for (const product of products) {
-    const productData = await getProductById(product.productId);
-
-    if (productData.data) {
-      totalPrice += productData.data.price * product.quantity;
-    }
-  }
-
-  return totalPrice;
-}
 async function AddToCartCtrl(request, response) {
   const { userId } = request.params;
   const products = request.body;
