@@ -2,6 +2,8 @@ import {
   getAllCartItem,
   createCartProduct,
   getUserIdById,
+  updateCartById,
+  deleteFromCartById,
 } from "../service/cart.service.js";
 import { getProductById } from "../service/product.service.js";
 
@@ -17,8 +19,21 @@ async function AddToCartCtrl(request, response) {
   const { userId } = request.params;
   const data = request.body;
   const id = data.productId;
-  const existingUser = getUserIdById(userId);
-  if (existingUser) {
+  const existingUser = await getUserIdById(userId);
+  if (existingUser.data) {
+    try {
+      const existingData = await getProductById(id);
+      console.log(existingUser.data);
+      if (existingData.data.ProductId) {
+        console.log(existingData.data.ProductId);
+        await updateCartById(existingData, addProduct);
+        response.status(201).send(addProduct);
+      } else {
+        response.status(404).send({ msg: "Product not found" });
+      }
+    } catch (error) {
+      response.status(500).send("failed to add to cart");
+    }
   } else {
     const addProduct = {
       products: [data],
@@ -39,12 +54,17 @@ async function AddToCartCtrl(request, response) {
     }
   }
 }
-
+async function tocheckuserid(request, response) {
+  const { userId } = request.params;
+  console.log(userId);
+  const existingUser = await getUserIdById(userId);
+  response.send(existingUser);
+}
 async function deleteFromCartByIdCtrl(request, response) {
   const { id } = request.params;
 
   try {
-    const res = await getProductById(id);
+    const res = await getUserIdById(id);
     if (res.data) {
       await deleteFromCartById(id);
       response.send({ msg: "deleted successfully", data: res.data });
@@ -55,4 +75,9 @@ async function deleteFromCartByIdCtrl(request, response) {
     response.status(500).send("deleted failed");
   }
 }
-export { getAllCartItemCtrl, AddToCartCtrl, deleteFromCartByIdCtrl };
+export {
+  getAllCartItemCtrl,
+  AddToCartCtrl,
+  deleteFromCartByIdCtrl,
+  tocheckuserid,
+};

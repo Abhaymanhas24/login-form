@@ -6,11 +6,22 @@ async function getAllCartItem() {
 async function createCartProduct(addProduct) {
   await Cart.create(addProduct).go();
 }
-async function getUserIdById(id) {
-  return await Cart.get({ userId: id }).go();
+async function getUserIdById(Id) {
+  return await Cart.get({ userId: Id }).go();
 }
-
+async function updateCartById(existingData, updatedata) {
+  return await Cart.put({
+    ...existingData.data,
+    ...updatedata,
+  }).go();
+}
 async function deleteFromCartById(id) {
-  await cart.delete({ userId: id }).go();
+  await Cart.delete({ userId: id }).go();
 }
-export { getAllCartItem, createCartProduct, getUserIdById, deleteFromCartById };
+export {
+  getAllCartItem,
+  createCartProduct,
+  getUserIdById,
+  deleteFromCartById,
+  updateCartById,
+};
