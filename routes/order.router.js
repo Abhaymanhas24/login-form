@@ -6,5 +6,5 @@ import {
   AddToOrderCtrl,
 } from "../controllers/order.controller.js";
 router.get("/", auth, getAllOrderCtrl);
-router.post("/:Id", auth, AddToOrderCtrl);
+router.post("/pay", auth, AddToOrderCtrl);
 export default router;

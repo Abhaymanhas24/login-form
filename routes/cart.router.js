@@ -8,7 +8,7 @@ import {
   tocheckuserid,
 } from "../controllers/cart.controller.js";
 router.get("/", auth, getAllCartItemCtrl);
-router.post("/:userId", auth, AddToCartCtrl);
+router.post("/add", auth, AddToCartCtrl);
 router.delete("/:id", auth, deleteFromCartByIdCtrl);
 router.get("/check/:userId", tocheckuserid);
 export default router;

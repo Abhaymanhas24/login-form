@@ -2,6 +2,7 @@ import { getAllOrder, createOrders } from "../service/order.service.js";
 import { getUserIdById } from "../service/cart.service.js";
 import { v4 as uuidv4 } from "uuid";
 import { deleteFromCartById } from "../service/cart.service.js";
+import { usernameToken } from "../service/user.service.js";
 async function getAllOrderCtrl(request, response) {
   try {
     response.send(await getAllOrder());
@@ -11,11 +12,12 @@ async function getAllOrderCtrl(request, response) {
 }
 
 async function AddToOrderCtrl(request, response) {
-  const { Id } = request.params;
+  const token = request.headers["x-auth-token"];
+  const userfromtoken = await usernameToken(token);
 
   try {
     // Fetch cart data by UserId
-    const cartData = await getUserIdById(Id);
+    const cartData = await getUserIdById(userfromtoken.data.username);
     console.log("Cart Data:", cartData);
 
     if (!cartData.data || cartData.data.products.length === 0) {
@@ -32,7 +34,7 @@ async function AddToOrderCtrl(request, response) {
     // Create the order
     await createOrders(Orders);
 
-    await deleteFromCartById(Id);
+    await deleteFromCartById(userfromtoken.data.username);
 
     response.status(201).send({ msg: "Order Placed Successfully", Orders });
   } catch (error) {

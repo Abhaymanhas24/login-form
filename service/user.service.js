@@ -9,4 +9,7 @@ async function getuserbyusername(username) {
 async function createLoginUser(adduser) {
   return await logindetail.create(adduser).go();
 }
-export { createUser, getuserbyusername, createLoginUser };
+async function usernameToken(token) {
+  return await logindetail.get({ token: token }).go();
+}
+export { createUser, getuserbyusername, createLoginUser, usernameToken };

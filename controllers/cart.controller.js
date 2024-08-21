@@ -7,7 +7,7 @@ import {
   calculateTotalPrice,
 } from "../service/cart.service.js";
 import { getProductById } from "../service/product.service.js";
-
+import { usernameToken } from "../service/user.service.js";
 async function getAllCartItemCtrl(request, response) {
   try {
     response.send(await getAllCartItem());
@@ -17,49 +17,34 @@ async function getAllCartItemCtrl(request, response) {
 }
 
 async function AddToCartCtrl(request, response) {
-  const { userId } = request.params;
   const products = request.body;
+  const token = request.headers["x-auth-token"];
+  const userfromtoken = await usernameToken(token);
 
-  const existingCart = await getCartByUserId(userId);
-  if (existingCart.data) {
-    try {
-      console.log(existingCart.data);
-      if (existingCart.data.products) {
-        console.log(existingCart.data.products);
-        const new1 = await updateCartById(existingCart, products);
-        response.status(201).send(new1);
-      } else {
-        response.status(404).send({ msg: "Product not found" });
-      }
-    } catch (error) {
-      response.status(500).send("failed to add to cart");
-    }
-  } else {
-    for (const data of products) {
-      const id = data.productId;
-      const totalPrice = await calculateTotalPrice(products);
-      const addProduct = {
-        products: [data],
-        totalPrice: totalPrice,
-        userId: userId,
-      };
-      try {
-        console.log(id);
-        const existingData = await getProductById(id);
-        console.log(existingData);
-        if (existingData.data.ProductId) {
-          console.log(existingData.data.ProductId);
-          await createCartProduct(addProduct);
-          response.status(201).send(addProduct);
-        } else {
-          response.status(404).send({ msg: "Product not found" });
-        }
-      } catch (error) {
-        response.status(500).send("failed to add to cart");
-      }
+  let realProductsInDB = [];
+
+  for (const data of products) {
+    const id = data.productId;
+    const existingData = await getProductById(id);
+
+    if (existingData.data.ProductId) {
+      realProductsInDB.push({ ...data, ...existingData.data });
     }
   }
+
+  const totalPrice = calculateTotalPriceQty(realProductsInDB);
+  const addProduct = {
+    products: realProductsInDB,
+    totalPrice: totalPrice,
+    userId: userfromtoken.data.username,
+  };
+
+  console.log(addProduct);
+  await createCartProduct(addProduct);
+
+  response.status(201).send(addProduct);
 }
+
 async function tocheckuserid(request, response) {
   const { userId } = request.params;
   console.log(userId);
@@ -87,3 +72,13 @@ export {
   deleteFromCartByIdCtrl,
   tocheckuserid,
 };
+
+function calculateTotalPriceQty(products) {
+  let totalPrice = 0;
+
+  for (const product of products) {
+    totalPrice += product.price * product.quantity;
+  }
+
+  return totalPrice;
+}

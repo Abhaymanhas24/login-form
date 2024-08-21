@@ -5,24 +5,24 @@ async function getAllCartItem() {
   return (await Cart.scan.go()).data;
 }
 async function createCartProduct(addProduct) {
-  await Cart.create(addProduct).go();
+  await Cart.put(addProduct).go();
 }
 async function getUserIdById(Id) {
   return await Cart.get({ userId: Id }).go();
 }
-async function calculateTotalPrice(products) {
-  let totalPrice = 0;
+// async function calculateTotalPrice(products) {
+//   let totalPrice = 0;
 
-  for (const product of products) {
-    const productData = await getProductById(product.productId);
+//   for (const product of products) {
+//     const productData = await getProductById(product.productId);
 
-    if (productData.data) {
-      totalPrice += productData.data.price * product.quantity;
-    }
-  }
+//     if (productData.data) {
+//       totalPrice += productData.data.price * product.quantity;
+//     }
+//   }
 
-  return totalPrice;
-}
+//   return totalPrice;
+// }
 async function updateCartById(existingCart, products) {
   const updatedTotalPrice = await calculateTotalPrice(products);
   const updatedCart = {
