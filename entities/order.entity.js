@@ -30,10 +30,6 @@ const Order = new Entity(
               type: "number",
               required: true,
             },
-            price: {
-              type: "number",
-              required: true,
-            },
           },
         },
         required: true,
@@ -64,7 +60,7 @@ const Order = new Entity(
       },
     },
   },
-  { client, table: "orders" }
+  { client, table: "order" }
 );
 
 export { Order };
