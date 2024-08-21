@@ -30,7 +30,7 @@ export async function createUserctr(request, response) {
   try {
     await createUser({ username: data.username, password: hashedPassword });
 
-    response.status(201).send(data);
+    response.status(201).send({ msg: "Signup completed", data });
   } catch (error) {
     response.status(500).send("fail to add user"); //something bad happend on serve is 500
   }
@@ -56,9 +56,7 @@ export async function loginUserctr(request, response) {
         process.env.SECRET_KEY
       );
       await createLoginUser({ token: token, username: data.username });
-      response
-        .status(200)
-        .send({ msg: "Login sucessful", token, msg: "updated in login table" });
+      response.status(200).send({ msg: "Login sucessful", token });
     } else {
       response.status(400).send({ msg: "Invalid credentials" });
     }
