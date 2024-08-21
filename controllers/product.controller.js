@@ -23,7 +23,9 @@ async function AddProductCtrl(request, response) {
   try {
     await createProduct(addProduct);
 
-    response.status(201).send(addProduct);
+    response
+      .status(201)
+      .send({ msg: "Product Uploaded Succesfully", addProduct });
   } catch (error) {
     response.status(500).send("fail to add Product"); //something bad happend on serve is 500
   }
@@ -36,9 +38,9 @@ async function updateProductByIdctrl(request, response) {
     const existingData = await getProductById(id);
     if (existingData.data) {
       const result = await updateProductById(existingData, updatedata);
-      response.send(result.data);
+      response.send({ msg: "Product Info Updated", result });
     } else {
-      response.status(404).send({ msg: "Movie not found" });
+      response.status(404).send({ msg: "Product not found" });
     }
   } catch (error) {
     response.status(500).send("failed to edit the movie");
