@@ -23,26 +23,19 @@ async function getUserIdById(Id) {
 
 //   return totalPrice;
 // }
-async function updateCartById(existingCart, products) {
-  const updatedTotalPrice = await calculateTotalPrice(products);
-  const updatedCart = {
-    ...existingCart.data,
-    products: [...products],
-    totalPrice: updatedTotalPrice,
-  };
+// async function updateCartById(existingCart, products) {
+//   const updatedTotalPrice = await calculateTotalPrice(products);
+//   const updatedCart = {
+//     ...existingCart.data,
+//     products: [...products],
+//     totalPrice: updatedTotalPrice,
+//   };
 
-  // Save the updated cart back to the database
-  return await Cart.put(updatedCart).go();
-}
+//   // Save the updated cart back to the database
+//   return await Cart.put(updatedCart).go();
+// }
 
 async function deleteFromCartById(id) {
   await Cart.delete({ userId: id }).go();
 }
-export {
-  getAllCartItem,
-  createCartProduct,
-  getUserIdById,
-  deleteFromCartById,
-  updateCartById,
-  calculateTotalPrice,
-};
+export { getAllCartItem, createCartProduct, getUserIdById, deleteFromCartById };

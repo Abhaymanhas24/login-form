@@ -2,9 +2,7 @@ import {
   getAllCartItem,
   createCartProduct,
   getUserIdById as getCartByUserId,
-  updateCartById,
   deleteFromCartById,
-  calculateTotalPrice,
 } from "../service/cart.service.js";
 import { getProductById } from "../service/product.service.js";
 import { usernameToken } from "../service/user.service.js";
