@@ -50,12 +50,12 @@ async function tocheckuserid(request, response) {
   response.send(existingUser);
 }
 async function deleteFromCartByIdCtrl(request, response) {
-  const { id } = request.params;
-
+  const token = request.headers["x-auth-token"];
+  const userfromtoken = await usernameToken(token);
   try {
-    const res = await getCartByUserId(id);
+    const res = await getCartByUserId(userfromtoken.data.username);
     if (res.data) {
-      await deleteFromCartById(id);
+      await deleteFromCartById(userfromtoken.data.username);
       response.send({ msg: "deleted successfully", data: res.data });
     } else {
       response.status(404).send({ msg: "Product not found" });
