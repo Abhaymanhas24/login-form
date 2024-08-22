@@ -1,7 +1,9 @@
 import { Order } from "../entities/order.entity.js";
 
-async function getAllOrder() {
-  return (await Order.scan.go()).data;
+async function getAllOrder(username) {
+  return (
+    await Order.scan.where(({ userId }, { eq }) => eq(userId, username))
+  ).go();
 }
 async function createOrders(Orders) {
   await Order.create(Orders).go();

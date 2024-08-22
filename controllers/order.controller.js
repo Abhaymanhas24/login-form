@@ -4,8 +4,10 @@ import { v4 as uuidv4 } from "uuid";
 import { deleteFromCartById } from "../service/cart.service.js";
 import { usernameToken } from "../service/user.service.js";
 async function getAllOrderCtrl(request, response) {
+  const token = request.headers["x-auth-token"];
+  const userfromtoken = await usernameToken(token);
   try {
-    response.send(await getAllOrder());
+    response.send((await getAllOrder(userfromtoken.data.username)).data);
   } catch (error) {
     response.send("products not found ");
   }
