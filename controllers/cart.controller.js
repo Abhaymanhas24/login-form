@@ -26,7 +26,10 @@ async function AddToCartCtrl(request, response) {
     const existingData = await getProductById(id);
 
     if (existingData.data.ProductId) {
-      realProductsInDB.push({ ...data, ...existingData.data });
+      if (existingData.data.stockQuantity >= data.quantity) {
+        console.log(existingData.data.ProductId);
+        realProductsInDB.push({ ...data, ...existingData.data });
+      }
     }
   }
 
